@@ -6,6 +6,17 @@
 [![Docker Pulls][docker-pull]][docker-url]
 [![GHCR Pulls][ghcr-pulls]][ghcr-url]
 
+> [!NOTE]  
+> This is a fork of the original repo containing a patch for the pwa theme.
+
+In my instance of Mealie I use a different theme. However, in the PWA version on iOS, the old color is still displayed at the top. This repo contains a patch, implemented via Github actions, to modify `./frontend/nuxt.config.js`. This follows the advice of [this issue](https://github.com/mealie-recipes/mealie/issues/4563#issuecomment-2600870969). The commands listed in the references issue are converted to a Github action that looks for an newer mealie image, modifies the color, builds the image, and publishes it to Docker Hub.
+
+The current custom color is:
+
+![#DDBF86][theme-color]
+
+#
+
 <!-- PROJECT LOGO -->
 <br />
 <p align="center">
@@ -104,3 +115,4 @@ Thanks to Depot for providing build instances for our Docker image builds.
 [linkedin-shield]: https://img.shields.io/badge/-LinkedIn-black.svg?style=flat-square&logo=linkedin&colorB=555
 [linkedin-url]: https://linkedin.com/in/hay-kot
 [product-screenshot]: docs/docs/assets/img/home_screenshot.png
+[theme-color]: https://shields.io/badge/%23DDBF86-DDBF86
