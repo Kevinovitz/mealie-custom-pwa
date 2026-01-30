@@ -42,6 +42,8 @@ jobs:
 
       - name: Patch theme color
         run: |
+          pwd
+          ls
           sed -i -E "s//E58325/${THEME_COLOR}/" ./frontend/nuxt.config.js
 
       - name: Login to Docker Hub
