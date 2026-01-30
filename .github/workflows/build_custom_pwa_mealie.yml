@@ -39,7 +39,7 @@ jobs:
           git clone https://github.com/mealie-recipes/mealie.git
           cd mealie
           git checkout $LATEST
-          sed -i -E "s//E58325/${THEME_COLOR}/" /frontend/nuxt.config.js
+          sed -i -E "s//E58325/${THEME_COLOR}/" frontend/nuxt.config.js
 
       - name: Login to Docker Hub
         uses: docker/login-action@v2
