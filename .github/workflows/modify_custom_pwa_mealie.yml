@@ -1,0 +1,37 @@
+name: Build Mealie (custom pwa theme)
+
+on:
+  schedule:
+    - cron: '0 0 * * 2'
+  workflow_dispatch:
+
+env:
+  IMAGE_NAME: custom-pwa-mealie
+  THEME_COLOR: "#DDBF86"
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Get latest Mealie release
+        run: |
+          LATEST=$(curl -s https://api.github.com/repos/mealie-recipes/mealie/releases/latest \
+            | jq -r '.tag_name')
+          echo "LATEST=$LATEST" >> $GITHUB_ENV
+
+      - name: Read last built version
+        run: |
+          LAST=$(cat LAST_BUILT_VERSION)
+          echo "LAST=$LAST" >> $GITHUB_ENV
+
+      - name: Clone Mealie and patch color
+        run: |
+          git clone https://github.com/mealie-recipes/mealie.git
+          cd mealie
+          git checkout $LATEST
+          sed -i -E "s/E58325/$THEME_COLOR/" ./frontend/nuxt.config.ts
+          cat ./frontend/nuxt.config.ts
