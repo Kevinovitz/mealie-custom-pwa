@@ -15,27 +15,33 @@ jobs:
     runs-on: ubuntu-latest
     outputs:
       update_image: ${{ steps.set_output.outputs.update }}
+      latest_version: ${{ steps.latest.outputs.LATEST_OUTPUT }}
+      last_version: ${{ steps.last.outputs.LAST_OUTPUT }}
     steps:
       - name: Checkout repo
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
 
       - name: Get latest Mealie release
+        id: latest
         run: |
           LATEST=$(curl -s https://api.github.com/repos/mealie-recipes/mealie/releases/latest \
             | jq -r '.tag_name')
           echo "LATEST=$LATEST" >> $GITHUB_ENV
+          echo "LATEST_OUTPUT=$LATEST" >> $GITHUB_OUTPUT
 
       - name: Read last built version
+        id: last
         run: |
           LAST=$(cat LAST_BUILT_VERSION)
           echo "LAST=$LAST" >> $GITHUB_ENV
+          echo "LAST_OUTPUT=$LAST" >> $GITHUB_OUTPUT
 
       - name: Skip if no new version
         id: set_output
         if: env.LATEST == env.LAST
         run: |
           echo "No new Mealie release. Skipping build."
-          echo "::set-output name=update::false"
+          echo "update=false" >> $GITHUB_OUTPUT
           exit 0
 
   build:
@@ -43,7 +49,9 @@ jobs:
     needs: [check]
     if: needs.check.outputs.update_image != 'false'
     runs-on: ubuntu-latest
-
+    env:
+      LATEST: ${{ needs.check.outputs.latest_version }}
+      LAST: ${{ needs.check.outputs.last_version }}
     steps:
 
       - name: Clone Mealie and patch color
