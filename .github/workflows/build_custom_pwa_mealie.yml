@@ -10,9 +10,11 @@ env:
   THEME_COLOR: "DDBF86"
 
 jobs:
-  build:
+  check:
+    name: Check for image update
     runs-on: ubuntu-latest
-
+    outputs:
+      update_image: ${{ steps.set_output.outputs.update }}
     steps:
       - name: Checkout repo
         uses: actions/checkout@v4
@@ -29,10 +31,20 @@ jobs:
           echo "LAST=$LAST" >> $GITHUB_ENV
 
       - name: Skip if no new version
+        id: set_output
         if: env.LATEST == env.LAST
         run: |
           echo "No new Mealie release. Skipping build."
+          echo "::set-output name=update::false"
           exit 0
+
+  build:
+    name: Build new image
+    needs: [check]
+    if: needs.check.outputs.update_image != 'false'
+    runs-on: ubuntu-latest
+
+    steps:
 
       - name: Clone Mealie and patch color
         run: |
