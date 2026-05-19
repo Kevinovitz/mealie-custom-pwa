@@ -54,6 +54,9 @@ jobs:
       LAST: ${{ needs.check.outputs.last_version }}
     steps:
 
+      - name: Checkout repo
+        uses: actions/checkout@v6
+
       - name: Clone Mealie and patch color
         run: |
           git clone https://github.com/mealie-recipes/mealie.git
