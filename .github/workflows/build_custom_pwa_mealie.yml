@@ -76,6 +76,7 @@ jobs:
           cp docker/Dockerfile .
           docker build \
             --platform linux/amd64 \
+            --label org.opencontainers.image.version=$LATEST \
             -t ${{ secrets.DOCKER_USERNAME }}/$IMAGE_NAME:$LATEST \
             -t ${{ secrets.DOCKER_USERNAME }}/$IMAGE_NAME:latest \
             .
